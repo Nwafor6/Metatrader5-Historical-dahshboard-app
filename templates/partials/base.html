@@ -1,0 +1,248 @@
+{%load static%}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Hello, world!</title>
+  </head>
+<style>
+  *{
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5;
+    border: 0;
+}
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, a, img, ul, ol, li, form, label, input, textarea, button {
+    font-size: 16px;
+    font-weight: normal;
+    color: #333;
+}
+body{
+    background-color: rgb(245, 241, 241);}
+.nav_header{
+    background-color: white;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.quick_links{
+    padding: 10px  0;
+    display: flex;
+    gap: 20px;
+}
+.quick_links button{
+    background-color: blue;
+    color: white !important;
+    border: 0;
+    padding: 7px;
+    border-radius: 5px;
+}
+.acct_info_holder{
+    display: flex;
+    justify-content: space-between;
+}
+.acct_info_holder .link{
+    padding-top: 10px;
+    padding: 10px;
+}
+.link .holder {
+    background-color: white;
+    padding-top: 10px;
+}
+.acct_info_holder .header_icon{
+    background-color: rgb(245, 241, 241);
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* padding: 8px; */
+    text-align: center;
+    
+}
+.acct_info_holder ._icon{
+    width: 40px;
+    border-radius: 100%;
+}
+.header_title{
+    padding-top: 10px;
+    font-weight: bold;
+}
+/* .main_activity{
+    padding: 10px;
+} */
+.main_activity .activity_body{
+    background-color: white;
+    padding: 20px;
+}
+.base{
+    height: 250px;
+}
+.main_activity .top{
+    margin-bottom: 1px;
+}
+.activity_display{
+    display: flex;
+    /* flex-flow: wrap; */
+    gap: 1px;
+}
+@media(max-width:600px){
+    .activity_display{
+        flex-flow: wrap;
+    }
+}
+.activity{
+    width: 100%;
+}
+.bi{
+    font-size: 30px;
+    color: red;
+    font-weight: bold;
+}
+</style>
+
+  <body>
+    <div class="nav_header">
+      <div class="logo"><a href="{%url 'login'%}"><h3><b><i class="bi bi-currency-bitcoin"></i></b></h3></a></div>
+      <div class="profile_img"><small>Welcome <b>{{name}}</b></small></div>
+    </div>
+    <div class="container">
+      <div class="quick_links">
+        <div class="link"><button class="btn ">Reliable</button></div>
+        <div class="link"><button class="btn ">Scalable</button></div>
+        <div class="link"><button class="btn ">Friendly</button></div>
+      </div>
+      <div class="acct_info_holder row">
+          <div class="link col-lg-3 col-md-6 col-sm-12 text-center">
+            <div class="holder">
+              <div class="header_icon">
+                <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="header_title">
+                  <h5><b>ID</b></h5>
+                </div>
+                <div class="header_title_value">
+                  <p>{{id}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="link col-lg-3 col-md-6 col-sm-12 text-center">
+            <div class="holder">
+              <div class="header_icon">
+                <i class="bi bi-person-vcard"></i>
+                </div>
+                <div class="header_title">
+                  <h5><b>Username</b></h5>
+                </div>
+                <div class="header_title_value">
+                  <p>{{name}}</p>
+                </div>
+            </div>
+          </div>
+        <div class="link col-lg-3 col-md-6 col-sm-12 text-center">
+          <div class="holder">
+            <div class="header_icon">
+              <i class="bi bi-currency-dollar"></i>
+              </div>
+              <div class="header_title">
+                <h5><b>Balance</b></h5>
+              </div>
+              <div class="header_title_value">
+                <p>${{balance}}</p>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="main_activity ">
+        <div class="activity top col-lg-12">
+          <div class="activity_body">
+            <h5><b>Activity</b></h5>
+            <small class="m-0">Last work data</small>
+          </div>
+        </div>
+        <div class="activity_display">
+          <div class="activity  ">
+            <div class="activity_body base">
+              <div class="activity_brk_down">
+                <div class="brk_dwn_heading">
+                  <h5><b>$500 was added</b></h5>
+                  <small class="m-0">Last work data</small>
+                </div>
+                <div class="brk_dwn_heading">
+                  <h5><b>$500 was added</b></h5>
+                  <small class="m-0">Last work data</small>
+                </div>
+                <div class="brk_dwn_heading">
+                  <h5><b>$500 was added</b></h5>
+                  <small class="m-0">Last work data</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="activity ">
+            <div class="activity_body base">
+              <div class="activity_brk_down">
+                <div class="brk_dwn_heading">
+                  <h5><b>Profit & loss</b></h5>
+                  <p>Trasaction History</p>
+                  <p><small style="color:red">Use Enlarge button below for Fullview.</small></p>
+                </div>
+                <div class="brk_dwn_heading">
+                  <iframe src="https://stocktradex.vercel.app/user_dash_plot/{{user}}"id="dashboard-iframe" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                  <script>
+                    setInterval(function() {
+                        var iframe = document.getElementById('dashboard-iframe');
+                        iframe.src = iframe.src;
+                    }, 60000);
+                </script>
+                </div>
+                <div class="brk_dwn_heading">
+                  <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Enlarge 
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>Your Transaction History </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <iframe src="https://stocktradex.vercel.app/user_dash_plot/{{user}}" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  </body>
+</html>
+
+

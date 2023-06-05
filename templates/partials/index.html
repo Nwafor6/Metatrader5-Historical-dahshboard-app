@@ -1,0 +1,46 @@
+<!-- user_dashboard.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            max-width: 600px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    
+    <canvas id="profitLossChart"></canvas>
+    <script>
+        const profitLossData = {{ profit_loss_data|safe }};
+        const timestamps = {{ timestamps|safe }};
+        console.log("Hello")
+
+        const ctx = document.getElementById('profitLossChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Profit/Loss',
+                    data: profitLossData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

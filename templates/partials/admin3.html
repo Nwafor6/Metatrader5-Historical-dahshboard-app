@@ -1,0 +1,46 @@
+<!-- admin_dashboard.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            max-width: 600px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="avgProfitLossChart"></canvas>
+    <p><small style="color:red">Best view in desktop view</small></p>
+   
+    <script>
+        const traders = {{ traders|safe }};
+        const profitLossData = {{ profit_loss_data|safe }};
+        // const traders = ["A","b",'C','D'];
+        // const profitLossData = [-4.679903794819406, -5.656276318901083, 3.5429955141562814, 7.1375594656473105,];
+        const ctx = document.getElementById('avgProfitLossChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: traders,
+                datasets: [{
+                    label: 'Average Profit/Loss',
+                    data: profitLossData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
