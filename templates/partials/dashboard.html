@@ -10,7 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/main.css'%}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <title>Hello, world!</title>
   </head>
 <style>
@@ -117,7 +118,7 @@ body{
 
   <body>
     <div class="nav_header">
-      <div class="logo"><a href="{%url 'login'%}"><h3><b><i class="bi bi-currency-bitcoin"></i></b></h3></a></div>
+      <div class="logo"><a href="/"><h3><b><i class="bi bi-currency-bitcoin"></i></b></h3></a></div>
       <div class="profile_img"><small>Welcome <b>{{name}}</b></small></div>
     </div>
     <div class="container">
@@ -126,6 +127,12 @@ body{
         <div class="link"><button class="btn ">Scalable</button></div>
         <div class="link"><button class="btn ">Friendly</button></div>
       </div>
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Select account</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
       <div class="acct_info_holder row">
           <div class="link col-lg-3 col-md-6 col-sm-12 text-center">
             <div class="holder">
@@ -202,7 +209,7 @@ body{
                   <p><small style="color:red">Use Enlarge button below for Fullview.</small></p>
                 </div>
                 <div class="brk_dwn_heading">
-                  <iframe src="https://stocktradex.vercel.app/user_dash_plot/{{user}}"id="dashboard-iframe" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                  <iframe src="/"id="dashboard-iframe" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
                   <script>
                     setInterval(function() {
                         var iframe = document.getElementById('dashboard-iframe');
@@ -223,7 +230,7 @@ body{
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <iframe src="https://stocktradex.vercel.app/user_dash_plot/{{user}}" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                        <iframe src="" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

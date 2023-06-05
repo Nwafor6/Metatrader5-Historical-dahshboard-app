@@ -14,16 +14,17 @@ from datetime import datetime, timedelta
 
 # Get Specific account to display
 def account_dashboard(request):
+    db=get_database_connection()
+    AccountCollections=db["Accounts"]
+    account_list = []
+    login_list=[account["login"] for account in AccountCollections.find()]
     if request.method=="POST":
         login=request.POST["login"]
-        db=get_database_connection()
-        AccountCollections=db["Accounts"]
-        # account_data= 
-        account_list = []
         for account in AccountCollections.find({"login":login}):
             account["_id"] = str(account["_id"])
             account_list.append(account)
-    return JsonResponse({"details":account_list}, status=200, safe=False)
+        return JsonResponse({"details":account_list}, status=200, safe=False)
+    return render(request, "partials/dashboard.html", {"account":login_list})
 
 def bgtransaction(request):
     thread=Thread(target=fetch_and_save_data)
