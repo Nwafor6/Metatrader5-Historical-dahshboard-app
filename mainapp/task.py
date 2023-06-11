@@ -11,10 +11,11 @@ def fetch_and_save_data():
     db=get_database_connection()
     AccountCollections=db["Accounts"]
     account_list=[]
+    print("Task has been called")
     # Check if the login was successful 
     for account in AccountCollections.find():
         
-        if not mt5.login(login=account["login"], server=str(account["server"]), password=str(account["password"])):
+        if not mt5.login(login=account["login"], server=account["server"], password=account["password"]):
             print("account-info:",mt5.account_info())
             return HttpResponse("Login failed")
         account = mt5.account_info()
@@ -25,6 +26,7 @@ def fetch_and_save_data():
         watch_time = mt5.symbol_info_tick("EURUSD").time
         watch_time = datetime.fromtimestamp(watch_time)
         mt5.shutdown()
+        print("MT5 section for")
         # Save data to db
         account_detail={
         "login":login,

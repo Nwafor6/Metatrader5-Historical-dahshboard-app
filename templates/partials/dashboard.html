@@ -8,7 +8,6 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/main.css'%}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -26,6 +25,9 @@
     font-weight: normal;
     line-height: 1.5;
     border: 0;
+}
+ul, ol{
+  padding: 0;
 }
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, a, img, ul, ol, li, form, label, input, textarea, button {
     font-size: 16px;
@@ -123,16 +125,22 @@ body{
     </div>
     <div class="container">
       <div class="quick_links">
-        <div class="link"><button class="btn ">Reliable</button></div>
-        <div class="link"><button class="btn ">Scalable</button></div>
-        <div class="link"><button class="btn ">Friendly</button></div>
+        <ul>
+          <li>Use the dropdown to select an account to view</li>
+        </ul>
       </div>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Select account</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+      <form method="post" id="form">
+        {%csrf_token%}
+        <select class="form-select" aria-label="Default select example" name="login" id="login">
+          <option selected>Select account</option>
+          {%for login in login_list%}
+          <option value="{{login}}">{{login}}</option>
+          {%endfor%}
+        </select>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary">Get Account</button>
+        </div>
+      </form>
       <div class="acct_info_holder row">
           <div class="link col-lg-3 col-md-6 col-sm-12 text-center">
             <div class="holder">
@@ -140,10 +148,10 @@ body{
                 <i class="bi bi-person-circle"></i>
                 </div>
                 <div class="header_title">
-                  <h5><b>ID</b></h5>
+                  <h5><b>Name</b></h5>
                 </div>
                 <div class="header_title_value">
-                  <p>{{id}}</p>
+                  <p><span id="name"></span></p>
               </div>
             </div>
           </div>
@@ -153,10 +161,10 @@ body{
                 <i class="bi bi-person-vcard"></i>
                 </div>
                 <div class="header_title">
-                  <h5><b>Username</b></h5>
+                  <h5><b>Equity</b></h5>
                 </div>
                 <div class="header_title_value">
-                  <p>{{name}}</p>
+                  <p><span id="equity"></span></p>
                 </div>
             </div>
           </div>
@@ -169,7 +177,7 @@ body{
                 <h5><b>Balance</b></h5>
               </div>
               <div class="header_title_value">
-                <p>${{balance}}</p>
+                <p>$ <span id="balance"></span></p>
               </div>
           </div>
         </div>
@@ -208,14 +216,9 @@ body{
                   <p>Trasaction History</p>
                   <p><small style="color:red">Use Enlarge button below for Fullview.</small></p>
                 </div>
-                <div class="brk_dwn_heading">
-                  <iframe src="/"id="dashboard-iframe" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
-                  <script>
-                    setInterval(function() {
-                        var iframe = document.getElementById('dashboard-iframe');
-                        iframe.src = iframe.src;
-                    }, 60000);
-                </script>
+                <div >
+                  <div class="canvas_holder"></div>
+                  <canvas id="chart_acc"></canvas>
                 </div>
                 <div class="brk_dwn_heading">
                   <!-- Button trigger modal -->
@@ -230,7 +233,8 @@ body{
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <iframe src="" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                        <div class="canvas_holder"></div>
+                        <canvas id="chart_acc_largeview"></canvas>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -245,10 +249,129 @@ body{
       </div>
     </div>
   
+  <script>
+      $(document).ready(() => {
+  let chart1; 
+  let chart2;
+
+  $("form").submit((e) => {
+    console.log("Hello my people from index");
+    e.preventDefault();
+    $(".canvas_holder").html(`
+    <div class="text-center">
+      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    `)
     
+
+    // Clear the existing chart before creating a new one
+    
+
+    setInterval(() => {
+      // AJAX request
+      $.ajax({
+        type: "post",
+        url: "",
+        data: {
+          login: $("#login").val(),
+        },
+        success: function (resp) {
+          if (chart1) {
+            chart1.destroy();
+            chart2.destroy();
+            
+          }
+          $(".canvas_holder").html(``)
+          console.log("Hello i am advising");
+          console.log(resp);
+          let account = resp.details;
+          console.log(account)
+          let timestamp = [];
+          let equity = [];
+          let balance = [];
+          account.forEach((e) => {
+            let js_datetime = new Date(`${e.watch_time}`);
+            js_datetime = js_datetime.toString();
+            timestamp.push(js_datetime.slice(4, 24));
+            equity.push(e.equity);
+            balance.push(e.balance);
+            $("#equity").text(`${e.equity}`)
+            $("#balance").text(`${e.balance}`)
+          });
+
+          // Populate Account1
+          // $("#name").text(`{${account.equity}}`)
+          function loadAccount() {
+            const data = {
+              labels: timestamp.map((e) => e),
+              datasets: [
+                {
+                  label: "Equity",
+                  data: equity.map((e) => e),
+                  borderColor: "red",
+                  fill: false,
+                },
+                {
+                  label: "Balance",
+                  data: balance.map((e) => e),
+                  borderColor: "blue",
+                  fill: false,
+                },
+              ],
+            };
+
+            const config = {
+              type: "line",
+              data,
+              options: {
+                scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: "Time",
+                    },
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: "Equity and Balance",
+                    },
+                  },
+                },
+              },
+            };
+
+            // Create new chart
+            chart1 = new Chart(
+              document.getElementById("chart_acc").getContext("2d"),
+              config
+            );
+            chart2 = new Chart(
+              document.getElementById("chart_acc_largeview").getContext("2d"),
+              config
+            );
+            // chart2 = new Chart(
+            //   document.getElementsByClassName("chart_acc").getContext("2d"),
+            //   config
+            // );
+          }
+
+          loadAccount();
+        },
+        error: function (err) {
+          console.log(err);
+        },
+      });
+    }, 60000); // End interval
+  });
+});
+
+    </script>
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
   </body>
 </html>
 
