@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <script>
+            const app_id = 37363
+            const api_token = "CBOX3kKgZ9fKvlG"
+            // ...
+
+    function sampleCalls() {
+    // Ping Request
+    fetch(`https://api.deriv.com/ping?app_id=${app_id}`)
+        .then(response => response.json())
+        .then(data => {
+        console.log(data.ping);
+        });
+
+    // Authorize
+    fetch('https://api.deriv.com/authorize', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+        authorize: api_token
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+        console.log(data);
+        });
+
+    // Get Balance
+    fetch('https://api.deriv.com/balance')
+        .then(response => response.json())
+        .then(data => {
+        console.log("Your current balance is", data.balance.currency, data.balance.balance);
+        });
+
+    // Get Active Symbols
+    fetch(`https://api.deriv.com/cache/active_symbols?active_symbols=brief&product_type=basic`)
+        .then(response => response.json())
+        .then(data => {
+        console.log(data);
+        });
+
+    // Get Asset Index
+    fetch(`https://api.deriv.com/cache/asset_index?asset_index=1`)
+        .then(response => response.json())
+        .then(data => {
+        console.log(data);
+        });
+    }
+
+    sampleCalls();
+
+    </script>
+</body>
+</html>

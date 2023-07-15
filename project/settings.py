@@ -29,12 +29,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
+    "corsheaders",
+    'rest_framework',
 ]
-
+CORS_ALLOW_ALL_ORIGINS=True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -73,7 +76,7 @@ DATABASES = {
 }
 MONGO_DB = {
     'host': config("MONGO_DB"),
-    'name': 'testdb',
+    'name': 'ft9ja',
 }
 
 # Password validation

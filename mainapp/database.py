@@ -9,6 +9,6 @@ def get_database_connection():
         # Create a new database connection
         client = MongoClient(settings.MONGO_DB['host'])
         db = client[settings.MONGO_DB['name']]
-        db_connection = client["Mydb"]
+        db_connection = client["newdb"]
     
     return db_connection

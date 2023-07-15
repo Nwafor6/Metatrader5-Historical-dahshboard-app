@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="successAlert" style="color:green"></div>
+    <div class="emailEmptyWarning" style="color:red"></div>
+    <form id="form">
+        <input type="text" value="" id="email"/>
+        <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+        const form = document.querySelector("#form");
+        const email = document.querySelector("#email");
+        const emailEmptyWarning= document.querySelector(".emailEmptyWarning")
+        const successAlert= document.querySelector(".successAlert")
+        // Add submit listner to the form
+        form.addEventListener("submit", (e)=>{
+            e.preventDefault();//Prevent the form from reloading after submitting
+            if (email.value == ""){
+                console.log("Empty name")
+                emailEmptyWarning.style.display="block"
+                emailEmptyWarning.innerHTML=`<p>Email cannot be blank</p>`
+                successAlert.style.display="none"
+            }else{
+                console.log("Not empty")
+                successAlert.style.display="block"
+                successAlert.innerHTML=`<p>Subscription successful Thank you</p>`
+                emailEmptyWarning.style.display="none"
+
+            }
+        })
+        
+    </script>
+</body>
+</html>
