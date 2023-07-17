@@ -11,7 +11,7 @@ $(document).ready(() => {
     $(".ajaxResponse").html("");
     $.ajax({
       type: "post",
-      url: "http://127.0.0.1:8000/account/",
+      url: "https://tradeft9ja.pythonanywhere.com/account/",
       data: {
         login: $("#login").val(),
       },
