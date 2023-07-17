@@ -56,17 +56,20 @@ from django.core.cache import cache
 def account_dashboard(request):
     if request.method == "POST":
         login = request.POST.get("login")
+        print(login,"Login")
         cached_data = cache.get(f"account_dashboard_{login}")
 
         if cached_data is None:
+            print("Not cahed")
             db = get_database_connection()
             account_collection = db["Accounts"]
             account_details_collection = db["AccountDetails"]
             account_list = []
             account = account_collection.find_one({"login": int(login)})
             if account:
-                thread = Thread(target=fetch_and_save_data, args=(account["login"], account["server"], account["password"]))
-                thread.start()
+                # thread = Thread(target=fetch_and_save_data, args=(account["login"], account["server"], account["password"]))
+                # thread.start()
+                print("Account exist")
                 for account_detail in account_details_collection.find({"login": int(login)}):
                     account_detail["_id"] = str(account_detail["_id"])
                     account_list.append(account_detail)
@@ -100,7 +103,8 @@ def account_dashboard(request):
 
         return JsonResponse({"details": login_list}, status=200)
 
-
+def home(request):
+    return render(request, "mainapp/index.html")
 
 # @csrf_exempt
 # def account_dashboard(request):
