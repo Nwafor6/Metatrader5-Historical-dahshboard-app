@@ -13,7 +13,7 @@ $(document).ready(function(){
     `)
     $.ajax({
         type: "get",
-        url: "http://127.0.0.1:8000/account/",
+        url: "https://tradeft9ja.pythonanywhere.com/account/",
         success:function(resp){
             $(".ajaxResponse").html(``)
             localStorage.removeItem("login")
