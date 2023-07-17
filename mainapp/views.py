@@ -3,17 +3,10 @@ from django.http import HttpResponse,JsonResponse
 import json
 from threading import Thread
 import time
-from .utils import initialize_mt5
-import MetaTrader5 as mt5
-from bson import ObjectId
-from bson import Int64
-from .task import fetch_and_save_data
 from .database import get_database_connection
 import datetime
 from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
-from .serializers import AccountSerializer
-from bson import ObjectId
 import json
 from django.core.cache import cache
 
