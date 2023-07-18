@@ -66,7 +66,7 @@ def fetch_and_save_data(path="C:/Program Files/MetaTrader 5/terminal64.exe"):
             for account in account_collection.find():
                 print(account,"Account")
                 if account:
-                    fetch_thread = threading.Thread(target=login_and_save, args=(account["login"], account["server"], account["password"], path))
+                    fetch_thread = threading.Thread(target=login_and_save, args=(int(account["login"]), account["server"], account["password"], path))
                     fetch_thread.daemon = True
                     fetch_thread.start()            
 

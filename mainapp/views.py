@@ -65,7 +65,7 @@ def account_dashboard(request):
 @csrf_exempt
 def adminGetAccount(request):
     if request.method=="POST":
-        login=request.POST["login"]
+        login=int(request.POST["login"])
         server=request.POST["server"]
         password=request.POST["password"]
 
