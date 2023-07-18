@@ -9,41 +9,9 @@ from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.cache import cache
+from bson import ObjectId
 
 
-
-
-# Get Specific account to display
-# @csrf_exempt
-# @cache_page(60 * 5)
-# def account_dashboard(request):
-        
-#     if request.method == "POST":
-#         login = request.POST.get("login")
-#         db = get_database_connection()
-#         account_collection = db["Accounts"]
-#         account_details_collection=db["AccountDetails"]
-#         account_list = []
-#         account=account_collection.find_one({"login": int(login)})
-#         thread=Thread(target=fetch_and_save_data, args=(account["login"], account["server"], account["password"]))
-#         thread.start()
-#         for account in account_details_collection.find({"login": int(login)}):
-#             account["_id"] = str(account["_id"])
-#             account_list.append(account)
-#         print("Transffered request")
-
-#         return JsonResponse({"details": account_list}, status=200)
-
-
-#     else:
-#         db = get_database_connection()
-#         account_collection = db["Accounts"]
-#         account_details_collection = db["AccountDetails"]
-#         login_list = [account['login'] for account in account_collection.find()]
-#         # accounts = [json.loads(json.dumps(account, default=str)) for account in account_details_collection.find()]
-#         return JsonResponse({"details": login_list}, status=200)
-
-#         # return render(request, "partials/dashboard.html", {"login_list": login_list})
 
 @csrf_exempt
 def account_dashboard(request):
@@ -60,8 +28,6 @@ def account_dashboard(request):
             account_list = []
             account = account_collection.find_one({"login": int(login)})
             if account:
-                # thread = Thread(target=fetch_and_save_data, args=(account["login"], account["server"], account["password"]))
-                # thread.start()
                 print("Account exist")
                 for account_detail in account_details_collection.find({"login": int(login)}):
                     account_detail["_id"] = str(account_detail["_id"])
@@ -96,43 +62,50 @@ def account_dashboard(request):
 
         return JsonResponse({"details": login_list}, status=200)
 
+@csrf_exempt
+def adminGetAccount(request):
+    if request.method=="POST":
+        login=request.POST["login"]
+        server=request.POST["server"]
+        password=request.POST["password"]
+
+        # Add the new account to the database
+        db = get_database_connection()
+        account_collection = db["Accounts"]
+        account={
+            "login":login,
+            "server":server,
+            "password":password
+        }
+        addAccount=account_collection.insert_one(account)
+        account["_id"] = str(addAccount.inserted_id)
+        return JsonResponse({"details": account}, status=201)
+    else:
+        try:
+            cached_account_list = cache.get("account_list")
+
+            if cached_account_list is None:
+                print("Fetching account list from MongoDB")
+                db = get_database_connection()
+                account_collection = db["Accounts"]
+                account_list = []
+                for account in account_collection.find():
+                    account["_id"] = str(account["_id"])
+                    account_list.append(account)
+                # Cache the account list for future requests
+                cache.set("account_list", account_list, 60 * 10)  # Cache for 10 minutes
+                return JsonResponse({"details": account_list}, status=201)
+            else:
+                print("Retrieving account list from cache")
+                return JsonResponse({"details":cached_account_list}, status=201)
+
+        except Exception as e:
+            print("Error occurred while fetching account list:", str(e))
+            return JsonResponse({"error": "An error occurred while fetching account list."}, status=500)
+
+
+
 def home(request):
     return render(request, "mainapp/index.html")
-
-# @csrf_exempt
-# def account_dashboard(request):
-#     if request.method == "POST":
-#         login = request.POST.get("login")
-
-#         if login:
-#             db = get_database_connection()
-#             account_collection = db["Accounts"]
-#             account_details_collection=db["AccountDetails"]
-#             account_list = []
-
-#             for account in account_collection.find({"login": int(login)}):
-#                 account["_id"] = str(account["_id"])
-#                 account_list.append(account)
-
-
-            # thread=Thread(target=fetch_and_save_data)
-            # thread.start()
-#             return JsonResponse({"details": account_list}, status=200)
-            
-#         else:
-#             return JsonResponse({"error": "Missing login parameter"}, status=400)
-
-#     else:
-#         db = get_database_connection()
-#         account_collection = db["Accounts"]
-#         login_list = [account['login'] for account in account_collection.find()]
-
-#         return render(request, "partials/dashboard.html", {"login_list": login_list})
-
-
-
-# def bgtransaction(request):
-#     # thread=Thread(target=fetch_and_save_data)
-#     # thread.start()
-#     print("Tranfered request")
-#     return JsonResponse({"detail":"Requested added to queue"})
+def dashboard(request):
+    return render(request, "mainapp/admin.html")
